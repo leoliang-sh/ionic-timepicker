@@ -102,9 +102,9 @@ angular.module('ionic-timepicker', ['ionic', 'ionic-timepicker.templates'])
               subTitle: '',
               scope: scope,
               buttons: [
-                {text: 'Close'},
+                {text: '关闭'},
                 {
-                  text: 'Set',
+                  text: '设置',
                   type: 'button-positive',
                   onTap: function (e) {
 
@@ -142,9 +142,9 @@ angular.module('ionic-timepicker', ['ionic', 'ionic-timepicker.templates'])
               subTitle: '',
               scope: scope,
               buttons: [
-                {text: 'Close'},
+                {text: '关闭'},
                 {
-                  text: 'Set',
+                  text: '设置',
                   type: 'button-positive',
                   onTap: function (e) {
 
