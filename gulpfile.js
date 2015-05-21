@@ -6,6 +6,7 @@ var uglify = require('gulp-uglify');
 var ngHtml2Js = require("gulp-ng-html2js");
 var minifyHtml = require("gulp-minify-html");
 var minifycss = require("gulp-minify-css");
+var gulpsync=require("gulp-sync")(gulp);
 
 
 gulp.task('html2js', function () {
@@ -36,4 +37,4 @@ gulp.task('clean', function () {
     .pipe(clean());
 });
 
-gulp.task('default', ['clean', 'build']);
+gulp.task('default', gulpsync.sync(['clean', 'build']));

@@ -9,7 +9,7 @@ angular.module('ionic-timepicker', ['ionic', 'ionic-timepicker.templates'])
       restrict: 'AE',
       replace: true,
       scope: {
-        etime: '=etime',        //epoch time getting from a template
+        itime: '=itime',        //time getting from a template
         format: '=format',      //format getting from a template
         step: '=step'           //step getting from a template
       },
@@ -17,11 +17,11 @@ angular.module('ionic-timepicker', ['ionic', 'ionic-timepicker.templates'])
 
         element.on("click", function () {
 
-          var obj = {epochTime: scope.etime, step: scope.step, format: scope.format};
+          var obj = {time: scope.itime, step: scope.step, format: scope.format};
 
           scope.time = {hours: 0, minutes: 0, meridian: ""};
 
-          var objDate = new Date(obj.epochTime * 1000);       // Epoch time in milliseconds.
+          var objDate = new Date(obj.time);       // time in milliseconds.
 
           scope.increaseHours = function () {
             scope.time.hours = Number(scope.time.hours);
@@ -74,7 +74,7 @@ angular.module('ionic-timepicker', ['ionic', 'ionic-timepicker.templates'])
 
           scope.decreaseMinutes = function () {
             scope.time.minutes = Number(scope.time.minutes);
-            if (scope.time.minutes != 0) {
+            if (scope.time.minutes !== 0) {
               scope.time.minutes -= obj.step;
             } else {
               scope.time.minutes = 60 - obj.step;
@@ -84,21 +84,22 @@ angular.module('ionic-timepicker', ['ionic', 'ionic-timepicker.templates'])
 
           if (obj.format == 12) {
 
-            scope.time.meridian = (objDate.getUTCHours() >= 12) ? "PM" : "AM";
-            scope.time.hours = (objDate.getUTCHours() > 12) ? ((objDate.getUTCHours() - 12)) : (objDate.getUTCHours());
-            scope.time.minutes = (objDate.getUTCMinutes());
+            scope.time.meridian = (objDate.getHours() >= 12) ? "下午" : "上午";
+            scope.time.hours = (objDate.getHours() > 12) ? ((objDate.getHours() - 12)) : (objDate.getHours());
+            scope.time.minutes = (objDate.getMinutes());
 
-            if (scope.time.hours == 0 && scope.time.meridian == "AM") {
+            if (scope.time.hours === 0 && scope.time.meridian == "上午") {
               scope.time.hours = 12;
             }
 
             scope.changeMeridian = function () {
-              scope.time.meridian = (scope.time.meridian === "AM") ? "PM" : "AM";
+              scope.time.meridian = (scope.time.meridian === "上午") ? "下午" : "上午";
             };
 
             $ionicPopup.show({
+              cssClass:'ionic-timepicker',
               templateUrl: 'time-picker-12-hour.html',
-              title: '<strong>12-Hour Format</strong>',
+              title: '<strong>12小时格式</strong>',
               subTitle: '',
               scope: scope,
               buttons: [
@@ -107,38 +108,32 @@ angular.module('ionic-timepicker', ['ionic', 'ionic-timepicker.templates'])
                   text: '设置',
                   type: 'button-positive',
                   onTap: function (e) {
-
                     scope.loadingContent = true;
-
-                    var totalSec = 0;
-
-                    if (scope.time.hours != 12) {
-                      totalSec = (scope.time.hours * 60 * 60) + (scope.time.minutes * 60);
-                    } else {
-                      totalSec = scope.time.minutes * 60;
+                    function hoursConvert(hours,meridian){
+                      if(meridian==="下午"){
+                        hours+=12;
+                      }
+                      return hours%24;
                     }
-
-                    if (scope.time.meridian === "AM") {
-                      totalSec += 0;
-                    } else if (scope.time.meridian === "PM") {
-                      totalSec += 43200;
-                    }
-                    scope.etime = totalSec;
+                    var timeStr=hoursConvert(scope.time.hours,scope.time.meridian)+":"+scope.time.minutes;
+                    var dateStr=objDate.getFullYear()+"-"+(objDate.getMonth()+1)+"-"+objDate.getDate();
+                    scope.itime=Date.parse(dateStr+" "+timeStr);
                   }
                 }
               ]
-            })
+            });
 
           }
 
           if (obj.format == 24) {
 
-            scope.time.hours = (objDate.getUTCHours());
-            scope.time.minutes = (objDate.getUTCMinutes());
+            scope.time.hours = (objDate.getHours());
+            scope.time.minutes = (objDate.getMinutes());
 
             $ionicPopup.show({
+              cssClass:'ionic-timepicker',
               templateUrl: 'time-picker-24-hour.html',
-              title: '<strong>24-Hour Format</strong>',
+              title: '<strong>24小时格式</strong>',
               subTitle: '',
               scope: scope,
               buttons: [
@@ -149,22 +144,14 @@ angular.module('ionic-timepicker', ['ionic', 'ionic-timepicker.templates'])
                   onTap: function (e) {
 
                     scope.loadingContent = true;
-
-                    var totalSec = 0;
-
-                    if (scope.time.hours != 24) {
-                      totalSec = (scope.time.hours * 60 * 60) + (scope.time.minutes * 60);
-                    } else {
-                      totalSec = scope.time.minutes * 60;
-                    }
-                    scope.etime = totalSec;
+                    var timeStr=scope.time.hours+":"+scope.time.minutes;
+                    var dateStr=objDate.getFullYear()+"-"+(objDate.getMonth()+1)+"-"+objDate.getDate();
+                    scope.itime=Date.parse(dateStr+" "+timeStr);
                   }
                 }
               ]
-            })
-
+            });
           }
-
         });
 
       }
