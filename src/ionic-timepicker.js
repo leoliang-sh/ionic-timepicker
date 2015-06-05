@@ -146,7 +146,12 @@ angular.module('ionic-timepicker', ['ionic', 'ionic-timepicker.templates'])
                     scope.loadingContent = true;
                     var timeStr=scope.time.hours+":"+scope.time.minutes;
                     var dateStr=objDate.getFullYear()+"-"+(objDate.getMonth()+1)+"-"+objDate.getDate();
-                    scope.itime=Date.parse(dateStr+" "+timeStr);
+                    var tmpItime=Date.parse(dateStr+" "+timeStr);
+                    
+                    if(isNaN(tmpItime)){//for ios
+                      tmpItime=Date.parse(dateStr.replace('-','/')+" "+timeStr);
+                    }
+                    scope.itime=tmpItime;
                   }
                 }
               ]
