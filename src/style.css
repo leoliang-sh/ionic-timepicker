@@ -8,6 +8,8 @@
 .timePickerBoxText {
   text-align: center;
   border: 1px solid #dddddd !important;
+  opacity: 1 !important;
+  padding: 0 !important;
 }
 .ionic-timepicker .popup button{
 	width: 100%;
