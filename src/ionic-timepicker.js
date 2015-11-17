@@ -138,8 +138,9 @@ angular.module('ionic-timepicker', ['ionic', 'ionic-timepicker.templates'])
 
                 if (obj.format == 24) {
 
-                    scope.time.hours = (objDate.getHours());
-                    scope.time.minutes = (objDate.getMinutes());
+                    scope.time.hours = ((objDate.getHours()) < 10) ? ('0' + (objDate.getHours()) : (objDate.getHours());
+                    scope.time.minutes = ((objDate.getMinutes() < 10) ? ('0' + (objDate.getMinutes()) : (objDate.getMinutes());
+
 
                     $ionicPopup.show({
                         cssClass: 'ionic-timepicker',
